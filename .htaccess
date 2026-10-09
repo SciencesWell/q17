@@ -1,0 +1,31 @@
+# Q17.tech
+ErrorDocument 404 /404.html
+DirectoryIndex index.html
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# Decap CMS GitHub OAuth proxy endpoints
+RewriteRule ^auth/?$ oauth.php?path=auth [QSA,L]
+RewriteRule ^callback/?$ oauth.php?path=callback [QSA,L]
+# www -> без www (https не форсируем: SSL, как правило, терминируется на прокси хостинга, и проверка %{HTTPS} даёт петлю)
+RewriteCond %{HTTP_HOST} ^www\.q17\.tech$ [NC]
+RewriteRule ^(.*)$ https://q17.tech/$1 [R=301,L]
+# http -> https только если прокси явно сообщает, что запрос пришёл по http
+RewriteCond %{HTTP:X-Forwarded-Proto} =http [NC]
+RewriteCond %{HTTP_HOST} ^q17\.tech$ [NC]
+RewriteRule ^(.*)$ https://q17.tech/$1 [R=301,L]
+# /index.html -> /
+RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
+RewriteRule ^index\.html$ / [R=301,L]
+</IfModule>
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
+</IfModule>
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType image/png "access plus 1 year"
+ExpiresByType image/jpeg "access plus 1 year"
+ExpiresByType image/webp "access plus 1 year"
+ExpiresByType image/svg+xml "access plus 1 year"
+ExpiresByType text/css "access plus 1 day"
+ExpiresByType application/javascript "access plus 1 day"
+</IfModule>

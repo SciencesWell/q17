@@ -1,0 +1,7 @@
+<?php
+// Copy this file to ../q17-oauth-config.php, one directory ABOVE public_html.
+// Fill in credentials from the GitHub OAuth App. Never commit the real config.
+return [
+    'client_id' => 'PASTE_GITHUB_OAUTH_CLIENT_ID_HERE',
+    'client_secret' => 'PASTE_GITHUB_OAUTH_CLIENT_SECRET_HERE',
+];
